@@ -571,11 +571,12 @@
   }
 
   .header__column--center {
-    justify-content: center;
+    justify-content: flex-end !important;
+    padding-right: 20px; /* Add some spacing before the icons */
     grid-area: center;
 
     header-menu:only-child .overflow-menu::part(list) {
-      justify-content: center;
+      justify-content: flex-end !important;
     }
   }
 
@@ -603,6 +604,13 @@
     grid-template-areas: 'left center right';
     grid-gap: var(--gap-xl);
     grid-template-columns: var(--header-template-columns);
+
+    /* Force 3-column layout for desktop to match UI: Logo - Menu - Icons */
+    @media screen and (min-width: 990px) {
+      grid-template-areas: 'left center right' !important;
+      grid-template-columns: auto 1fr auto !important;
+      align-items: center;
+    }
 
     /* If menu is in center column */
     &:has(.header__column--center header-menu) {

@@ -113,8 +113,23 @@
            
            .menu-list--navigation-bar.desktop-visible .navigation-bar__link {
              font-size: var(--desktop-font-size) !important;
-             font-weight: bold !important;
-             text-transform: var(--desktop-text-transform) !important;
+             font-weight: 700 !important;
+             text-transform: uppercase !important;
+             display: flex;
+             align-items: center;
+             gap: 8px; /* Space between text and arrow */
+           }
+
+           /* Dropdown Arrow for items with submenus */
+           .menu-list--navigation-bar.desktop-visible .navigation-bar__link[aria-haspopup="true"]::after {
+             content: '';
+             display: inline-block;
+             width: 6px;
+             height: 6px;
+             border-right: 2px solid currentColor;
+             border-bottom: 2px solid currentColor;
+             transform: rotate(45deg);
+             margin-bottom: 3px;
            }
 
            .navigation-bar__logo {
