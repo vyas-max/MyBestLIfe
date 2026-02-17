@@ -49,6 +49,8 @@
           "static": true,
           "settings": {
             "hide_logo_on_home_page": false,
+            "logo_width": 100,
+            "logo_width_mobile": 80,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
@@ -74,7 +76,14 @@
             "color_scheme_navigation_bar": "",
             "drawer_accordion": false,
             "drawer_accordion_expand_first": false,
-            "drawer_dividers": false
+            "drawer_dividers": false,
+            "navigation_bar_logo": "shopify://shop_images/073_My_Best_Life_Logosfwa_cbfd8734-7de1-4373-b161-2c0e33fd8ef9.png",
+            "navigation_bar_logo_width": 100,
+            "show_on_desktop": false,
+            "desktop_font_size": 14,
+            "desktop_font_weight": "400",
+            "desktop_text_transform": "none",
+            "desktop_gap": 30
           },
           "blocks": {}
         }
