@@ -22,11 +22,18 @@
     </div>
 
   {% when 'navigation_bar' %}
-    {% if block_settings.navigation_bar == true %}
+    {% if block_settings.navigation_bar == true or block_settings.show_on_desktop == true %}
       <div
-        class="menu-list menu-list--mobile{% if transparent == blank %} color-{{ block_settings.color_scheme_navigation_bar }}{% endif %}"
-        style="--menu-horizontal-gap: 15px; --mobile-nav-margin: auto;"
-        data-hydration-key="header-menu-mobile-navigation-bar"
+        class="menu-list menu-list--navigation-bar{% if transparent == blank %} color-{{ block_settings.color_scheme_navigation_bar }}{% endif %} {% if block_settings.show_on_desktop %} desktop-visible {% else %} mobile-only {% endif %}"
+        style="
+          --menu-horizontal-gap: 15px; 
+          --mobile-nav-margin: auto;
+          --desktop-gap: {{ block_settings.desktop_gap }}px;
+          --desktop-font-size: {{ block_settings.desktop_font_size }}px;
+          --desktop-font-weight: {{ block_settings.desktop_font_weight }};
+          --desktop-text-transform: {{ block_settings.desktop_text_transform }};
+        "
+        data-hydration-key="header-menu-navigation-bar"
       >
         <div class="menu-list__scroll-container">
           <ul
@@ -38,7 +45,7 @@
                 <a
                   href="{{ link.url }}"
                   id="MenuItem-{{ link.handle }}"
-                  class="menu-list__item"
+                  class="menu-list__item navigation-bar__link"
                   {% if link.current %}
                     aria-current="page"
                   {% endif %}
@@ -50,6 +57,39 @@
           </ul>
         </div>
       </div>
+      
+      {% style %}
+        .menu-list--navigation-bar.desktop-visible {
+           /* Base styles are inherited from menu-list but we can override for desktop */
+        }
+        
+        .navigation-bar__link {
+           font-size: 14px; /* Default fallback */
+        }
+
+        @media screen and (min-width: 990px) {
+           .menu-list--navigation-bar.mobile-only {
+             display: none;
+           }
+
+           .menu-list--navigation-bar.desktop-visible {
+             display: flex;
+             justify-content: center;
+             gap: var(--desktop-gap);
+           }
+           
+           .menu-list--navigation-bar.desktop-visible .menu-list__list {
+             justify-content: center;
+             gap: var(--desktop-gap);
+           }
+
+           .menu-list--navigation-bar.desktop-visible .navigation-bar__link {
+             font-size: var(--desktop-font-size) !important;
+             font-weight: var(--desktop-font-weight) !important;
+             text-transform: var(--desktop-text-transform) !important;
+           }
+        }
+      {% endstyle %}
     {% endif %}
   {% else %}
     {% liquid
@@ -919,6 +959,60 @@
       "id": "drawer_dividers",
       "label": "t:settings.dividers",
       "default": false
+    },
+    {
+      "type": "header",
+      "content": "Navigation Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_desktop",
+      "label": "Show on Desktop",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "desktop_font_size",
+      "label": "Desktop Font Size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "desktop_font_weight",
+      "label": "Desktop Font Weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "desktop_text_transform",
+      "label": "Desktop Text Transform",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "capitalize", "label": "Capitalize" },
+        { "value": "lowercase", "label": "Lowercase" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "desktop_gap",
+      "label": "Desktop Gap",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
     }
   ]
 }
