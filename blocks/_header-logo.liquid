@@ -4,6 +4,8 @@
   assign block_settings = block.settings
   assign use_inverse_logo = false
 
+  assign logo = block_settings.image | default: settings.logo
+  
   if section.settings.enable_transparent_header_home and template.name == 'index' and section.settings.home_color_scheme == 'inverse'
     assign use_inverse_logo = true
   elsif section.settings.enable_transparent_header_product and template.name == 'product' and section.settings.product_color_scheme == 'inverse'
@@ -13,10 +15,12 @@
   endif
 
   if use_inverse_logo
-    if settings.logo_inverse != blank
+    if block_settings.image_inverse != blank
+      assign inverse_logo = block_settings.image_inverse
+    elsif settings.logo_inverse != blank
       assign inverse_logo = settings.logo_inverse
     else
-      assign inverse_logo = settings.logo
+      assign inverse_logo = logo
     endif
   endif
 %}
@@ -56,7 +60,7 @@
     data-testid="header-logo"
   >
     {% render 'image',
-      image: settings.logo,
+      image: logo,
       class: 'header-logo__image',
       height: settings.logo_height,
       text_fallback: shop.name,
@@ -160,6 +164,20 @@
       "id": "hide_logo_on_home_page",
       "label": "t:settings.hide_logo_on_home_page",
       "info": "t:info.hide_logo_on_home_page_help"
+    },
+    {
+      "type": "header",
+      "content": "Logo Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_inverse",
+      "label": "Transparent Logo"
     },
     {
       "type": "header",
