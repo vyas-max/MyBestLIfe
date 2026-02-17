@@ -113,8 +113,14 @@
            
            .menu-list--navigation-bar.desktop-visible .navigation-bar__link {
              font-size: var(--desktop-font-size) !important;
-             font-weight: var(--desktop-font-weight) !important;
+             font-weight: bold !important;
              text-transform: var(--desktop-text-transform) !important;
+           }
+
+           .navigation-bar__logo {
+             width: {{ block_settings.navigation_bar_logo_width }}px;
+             max-width: 100%;
+             height: auto;
            }
         }
       {% endstyle %}
