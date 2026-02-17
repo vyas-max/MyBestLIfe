@@ -35,6 +35,17 @@
         "
         data-hydration-key="header-menu-navigation-bar"
       >
+        {%- if block_settings.navigation_bar_logo != blank -%}
+          <div class="navigation-bar__logo-wrapper">
+             {%- assign logo_width = block_settings.navigation_bar_logo_width -%}
+             {{ block_settings.navigation_bar_logo | image_url: width: logo_width | image_tag: 
+                class: 'navigation-bar__logo',
+                widths: '50, 100, 150, 200, 250, 300, 400, 500',
+                height: 'auto',
+                width: logo_width
+             }}
+          </div>
+        {%- endif -%}
         <div class="menu-list__scroll-container">
           <ul
             class="menu-list__list list-unstyled"
@@ -74,15 +85,32 @@
 
            .menu-list--navigation-bar.desktop-visible {
              display: flex;
-             justify-content: center;
+             align-items: center;
+             justify-content: center; /* Or flex-start if logo is present? usually centered */
              gap: var(--desktop-gap);
            }
            
+           /* If logo is present, use space-between or flex-start? User image showed logo LEFT, menu RIGHT/CENTER. */
+           /* Let's try to infer: standard bar usually has items next to each other. */
+           
+           .menu-list--navigation-bar.desktop-visible:has(.navigation-bar__logo-wrapper) {
+              justify-content: flex-start;
+           }
+
            .menu-list--navigation-bar.desktop-visible .menu-list__list {
              justify-content: center;
              gap: var(--desktop-gap);
+             /* Ensure menu takes available space or sits next to logo */
+             margin-left: auto; margin-right: auto; /* simplistic centering attempt if flex-start */
            }
-
+           
+           /* Better approach: Let user decide alignment? For now, if logo exists, put it left and menu centered/right */
+           
+           .navigation-bar__logo-wrapper {
+              flex-shrink: 0;
+              margin-right: var(--desktop-gap);
+           }
+           
            .menu-list--navigation-bar.desktop-visible .navigation-bar__link {
              font-size: var(--desktop-font-size) !important;
              font-weight: var(--desktop-font-weight) !important;
@@ -963,6 +991,21 @@
     {
       "type": "header",
       "content": "Navigation Bar"
+    },
+    {
+      "type": "image_picker",
+      "id": "navigation_bar_logo",
+      "label": "Navigation Bar Logo"
+    },
+    {
+      "type": "range",
+      "id": "navigation_bar_logo_width",
+      "label": "Logo Width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 100
     },
     {
       "type": "checkbox",
