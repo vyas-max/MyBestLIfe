@@ -366,13 +366,31 @@
 
 {% stylesheet %}
   body {
-    --header-height: 60px;
+    --header-height: 80px; /* Increased height */
     --header-group-height: var(--header-height);
     --transparent-header-offset-boolean: 0; /* stylelint-disable-line declaration-property-value-disallowed-list */
   }
 
   .header {
     display: block;
+    /* Remove shadow if any */
+    box-shadow: none !important;
+  }
+  
+  /* ... existing styles ... */
+
+  /* Remove borders */
+  .header__row--top:not(.divider--page-width),
+  .header__row--top.divider--page-width .header__columns,
+  .header__row--bottom {
+    border-bottom: none !important;
+  }
+
+  @media screen and (max-width: 749px) {
+    .header__row--top:not(.divider--page-width),
+    .header__row--top.divider--page-width .header__columns {
+      border-bottom-width: 0 !important;
+    }
   }
 
   #header-component :is(.header-menu, .dropdown-localization) {
@@ -571,8 +589,8 @@
   }
 
   .header__column--center {
-    justify-content: flex-end !important;
-    padding-right: 20px; /* Add some spacing before the icons */
+    justify-content: center !important; /* Center the menu */
+    padding-right: 0;
     grid-area: center;
 
     header-menu:only-child .overflow-menu::part(list) {

@@ -188,7 +188,16 @@
             {%- endif -%}
             ref="menuitem"
           >
-            <span class="menu-list__link-title">{{- link.title -}}</span>
+            <span class="menu-list__link-title">
+              {{- link.title -}}
+              {%- if link.links != blank -%}
+                <span class="svg-wrapper icon-caret-small">
+                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              {%- endif -%}
+            </span>
           </a>
           {%- if link.links != blank -%}
             <div class="menu-list__submenu{{ color_scheme_classes }}" ref="submenu[]">
@@ -377,15 +386,20 @@
     transition: color var(--animation-speed) var(--animation-easing);
     text-decoration: none;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    cursor: pointer;
-    height: 100%;
     margin-block: 0;
+    
+    /* Custom Navigation Styles */
+    font-family: var(--font-body--family); /* Clean sans-serif */
+    font-weight: 500; /* Medium */
+    font-size: 14px; /* 14-15px */
+    letter-spacing: 0.05em; /* Slightly increased */
+    text-transform: uppercase;
+    color: var(--color-foreground); /* Dark gray / black */
 
     &:hover,
     &:focus {
-      color: var(--menu-top-level-font-color);
+      color: rgba(var(--color-foreground-rgb), 0.7); /* Subtle color change */
+      text-decoration: none; /* No underline */
     }
 
     @media screen and (min-width: 750px) {
@@ -781,6 +795,18 @@
   .mega-menu__submenu {
     /* preserves the inherited grid layout when this submenu wrapper is used */
     display: contents;
+  }
+  .icon-caret-small {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 4px;
+    width: 10px;
+    height: 10px;
+  }
+  
+  .icon-caret-small svg {
+    width: 100%;
+    height: auto;
   }
 {% endstylesheet %}
 

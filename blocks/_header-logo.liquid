@@ -68,6 +68,11 @@
     %}
   </span>
 
+  <span class="header-logo__text">
+    <span class="header-logo__my">my</span>
+    <span class="header-logo__best-life">Best L<span class="header-logo__i-dot">i</span>fe</span>
+  </span>
+
   {% if use_inverse_logo %}
     <span
       class="header-logo__image-container header-logo__image-container--inverse"
@@ -143,6 +148,53 @@
   .header-logo__image-container--inverse {
     display: var(--header-logo-inverse-display, none);
   }
+
+  /* Custom Logo Styles */
+  .header-logo__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 0.8;
+  }
+
+  /* Hide custom text if image is present */
+  .header-logo:has(.header-logo__image) .header-logo__text {
+    display: none;
+  }
+  
+  /* But wait, if the user requested this specific logo, maybe they don't have an image for it and want it built with text? 
+     The prompt says "brand logo text 'my Best Life' with stylized typography". 
+     I will ensure it shows up. If the user has an image uploaded, they might want that, but for this task I need to deliver the requirements.
+     I'll make the text visible and hide the image if it exists, OR I'll assume they haven't uploaded an image or want this to override.
+     actually, let's keep the image if it exists, but style the text_fallback properly if it doesn't? 
+     No, the user wants "Create... header UI... matching reference... Logo: Text 'my Best Life'". 
+     I should probably force this text logo to appear for the purpose of this task, checking if I should hide the image is safer.
+  */
+
+  .header-logo__my {
+    font-family: var(--font-body--family); /* Sans-serif fallback or use specific */
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: normal;
+    align-self: flex-start;
+    margin-left: 4px;
+    margin-bottom: -5px;
+  }
+
+  .header-logo__best-life {
+    font-family: "Times New Roman", Times, serif; /* Elegant serif */
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: normal;
+    color: #000;
+    position: relative;
+  }
+
+  .header-logo__i-dot {
+    color: #c5a059; /* Subtle golden accent */
+    font-style: normal;
+  }
+
 {% endstylesheet %}
 
 {% schema %}
