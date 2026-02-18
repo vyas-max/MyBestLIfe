@@ -199,7 +199,65 @@
               {%- endif -%}
             </span>
           </a>
-          {%- if link.links != blank -%}
+          {%- if link.links != blank or link.title == 'HEALTH INTERESTS' -%}
+            {% if link.title == 'HEALTH INTERESTS' %}
+               <div class="menu-list__submenu menu-list__submenu--custom-mega" ref="submenu[]">
+                 <div class="custom-mega-menu-container">
+                   <div class="custom-mega-menu-grid">
+                     <!-- Card 1: Skin Health -->
+                     <a href="#" class="custom-mega-card">
+                       <div class="custom-mega-card__image-wrapper">
+                         <!-- Placeholder image if no specific image is provided, or use a specific asset if available. 
+                              For now using a placeholder text/color since I don't have images. 
+                              Actually, requirements say "square image thumbnail". I'll use a placeholder div. -->
+                         <div class="custom-mega-card__image-placeholder" style="background-color: #e0e0e0;"></div>
+                       </div>
+                       <div class="custom-mega-card__content">
+                         <h3 class="custom-mega-card__title">Skin Health</h3>
+                         <p class="custom-mega-card__desc">Support your skin from within.</p>
+                         <span class="custom-mega-btn custom-mega-btn--primary">Shop Now</span>
+                       </div>
+                     </a>
+                     
+                     <!-- Card 2: Women's Health -->
+                     <div class="custom-mega-card custom-mega-card--disabled">
+                       <div class="custom-mega-card__image-wrapper">
+                         <div class="custom-mega-card__image-placeholder" style="background-color: #e0e0e0;"></div>
+                       </div>
+                       <div class="custom-mega-card__content">
+                         <h3 class="custom-mega-card__title">Women's Health</h3>
+                         <p class="custom-mega-card__desc">Holistic support for women.</p>
+                         <span class="custom-mega-btn custom-mega-btn--secondary">Coming Soon</span>
+                       </div>
+                     </div>
+
+                     <!-- Card 3: Brain Health -->
+                     <div class="custom-mega-card custom-mega-card--disabled">
+                       <div class="custom-mega-card__image-wrapper">
+                         <div class="custom-mega-card__image-placeholder" style="background-color: #e0e0e0;"></div>
+                       </div>
+                       <div class="custom-mega-card__content">
+                         <h3 class="custom-mega-card__title">Brain Health</h3>
+                         <p class="custom-mega-card__desc">Focus, clarity, and memory.</p>
+                         <span class="custom-mega-btn custom-mega-btn--secondary">Coming Soon</span>
+                       </div>
+                     </div>
+
+                     <!-- Card 4: Cellular Health -->
+                     <div class="custom-mega-card custom-mega-card--disabled">
+                       <div class="custom-mega-card__image-wrapper">
+                         <div class="custom-mega-card__image-placeholder" style="background-color: #e0e0e0;"></div>
+                       </div>
+                       <div class="custom-mega-card__content">
+                         <h3 class="custom-mega-card__title">Cellular Health</h3>
+                         <p class="custom-mega-card__desc">Optimize your cellular energy.</p>
+                         <span class="custom-mega-btn custom-mega-btn--secondary">Coming Soon</span>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+            {% else %}
             <div class="menu-list__submenu{{ color_scheme_classes }}" ref="submenu[]">
               <div
                 id="submenu-{{ forloop.index }}"
@@ -227,6 +285,7 @@
                 </div>
               </div>
             </div>
+            {% endif %}
           {%- endif -%}
         </li>
       {% endfor %}
@@ -808,6 +867,125 @@
     width: 100%;
     height: auto;
   }
+
+  /* Custom Mega Menu Styles */
+  .menu-list__submenu--custom-mega {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: transparent;
+    padding-top: 10px; /* Gap betwen menu and dropdown */
+  }
+
+  .custom-mega-menu-container {
+    background-color: #F8F5F0; /* Light beige / off-white */
+    border-radius: 20px; /* Large radius */
+    padding: 30px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); /* Soft shadow */
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    /* Centering logic if needed, but width 100% of header usually implies full width */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .custom-mega-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .custom-mega-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: inherit;
+    padding: 10px;
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .custom-mega-card:not(.custom-mega-card--disabled):hover {
+    background-color: rgba(255,255,255,0.5);
+  }
+
+  .custom-mega-card__image-wrapper {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+  }
+
+  .custom-mega-card__image-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px; /* Medium radius */
+    object-fit: cover;
+  }
+
+  .custom-mega-card__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .custom-mega-card__title {
+    font-family: var(--font-body--family);
+    font-weight: 600;
+    font-size: 16px;
+    color: #1a1a1a;
+    margin: 0 0 4px 0;
+  }
+
+  .custom-mega-card__desc {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #666;
+    margin: 0 0 10px 0;
+  }
+
+  .custom-mega-btn {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 13px;
+    text-align: center;
+    background-color: #D4B06A; /* Muted gold / mustard */
+    color: #1a1a1a;
+    border: none;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .custom-mega-btn--secondary {
+    opacity: 0.7;
+    cursor: default;
+    background-color: #e0d5b5; /* More muted for disabled */
+  }
+  
+  /* Ensure parent allows full width dropdown */
+  .header__column--center {
+    position: static !important;
+  }
+  
+  .header-menu {
+    position: static !important;
+  }
+  
+  .menu-list {
+    position: static !important;
+  }
+  
+  .menu-list__list-item {
+    position: static !important; /* Allow dropdown to be full width relative to header */
+  }
+
 {% endstylesheet %}
 
 {% schema %}
