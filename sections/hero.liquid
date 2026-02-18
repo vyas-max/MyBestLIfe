@@ -8,11 +8,10 @@
   .hero-slider-section {
     position: relative;
     width: 100%;
-    /* 80-90vh as requested, checking settings to allow override */
-    height: 85vh; 
-    min-height: 600px;
+    height: 85vh; /* Adjustable via settings ideally, but sticking to requested size */
+    min-height: 400px;
     overflow: hidden;
-    background: linear-gradient(135deg, #e0f2f1 0%, #b2ebf2 100%); /* Soft blue/aqua fallback */
+    background-color: #f0f0f0; /* Placeholder bg */
   }
 
   .hero-slider-track {
@@ -30,95 +29,28 @@
   .hero-slide {
     min-width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     position: relative;
-    box-sizing: border-box;
+    flex-shrink: 0;
   }
   
-  /* Background Overlay (Texture) */
-  .hero-slide__bg-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .hero-slide__image-container {
     width: 100%;
     height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    background-size: cover;
-    background-position: center;
-    opacity: 0.6; /* Slight transparency for texture to blend with gradient */
+    display: block;
   }
 
-  .hero-slide__content-container {
+  .hero-slide__image {
     width: 100%;
-    max-width: 1400px;
     height: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
-    z-index: 2;
-    padding: 0 40px;
-    margin: 0 auto;
-  }
-
-  .hero-slide__text-col {
-    flex: 1; /* Left side */
-    padding-right: 20px;
-    max-width: 650px; /* Constrain text width */
-  }
-
-  .hero-slide__image-col {
-    flex: 1; /* Right side */
-    height: 100%;
-    position: relative;
-    display: flex;
-    align-items: flex-end; /* Align image to bottom naturally */
-    justify-content: center;
-  }
-
-  .hero-slide__model-image {
-    max-height: 100%;
-    height: 100%;
-    width: auto;
-    object-fit: contain; /* Full height naturally */
-    object-position: bottom right;
-    mask-image: linear-gradient(to bottom, black 90%, transparent 100%); /* Subtle fade at very bottom if needed, usually not with full height */
+    object-fit: cover; /* Cover entire slide area */
+    object-position: center;
+    display: block;
   }
   
-  /* Typography */
-  .hero-slide__heading {
-    font-family: var(--font-heading-family); /* Or use specific modern sans */
-    font-weight: 900;
-    font-size: clamp(36px, 4vw, 64px); /* Responsive sizing */
-    line-height: 1.1;
-    letter-spacing: 0.02em; /* Slightly increased */
-    text-transform: uppercase;
-    color: #000000;
-    margin-bottom: 30px;
-  }
-
-  .hero-slide__btn {
-    display: inline-block;
-    background-color: #000000;
-    color: #D4B06A; /* Muted gold/beige */
-    padding: 18px 40px;
-    font-size: 16px;
-    font-weight: 500;
-    text-decoration: none;
-    border-radius: 4px; /* Slightly rounded */
-    transition: opacity 0.3s;
-  }
-  
-  .hero-slide__btn:hover {
-    opacity: 0.9;
-  }
-
   /* Dots */
   .hero-slider-dots {
     position: absolute;
-    bottom: 30px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -129,87 +61,49 @@
   .hero-slider-dot {
     width: 10px;
     height: 10px;
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(255,255,255,0.5);
     border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
   .hero-slider-dot.active {
-    background-color: #000000;
+    background-color: #ffffff;
+    transform: scale(1.2);
   }
 
   /* Mobile Responsive */
   @media screen and (max-width: 768px) {
     .hero-slider-section {
-      height: auto;
-      min-height: 100vh; /* Stacked layout needs height */
-    }
-    
-    .hero-slide__content-container {
-      flex-direction: column-reverse; /* Image below text? Requirement: "Image stacks below text" -> Column normal, but content first */
-      flex-direction: column; 
-      padding: 60px 20px 40px;
-      justify-content: flex-start;
-    }
-    
-    .hero-slide__text-col {
-      padding-right: 0;
-      margin-bottom: 20px;
-      text-align: center;
-      max-width: 100%;
-    }
-    
-    .hero-slide__image-col {
-      width: 100%;
-      height: 50vh; /* Half screen for image on mobile */
-      align-items: flex-end;
+      height: 60vh; /* Allow different height on mobile if needed, or keep same */
     }
   }
-
 {%- endstyle -%}
 
 <div class="hero-slider-section" id="hero-slider-{{ section.id }}" data-autoplay="{{ section.settings.autoplay_speed }}">
   <div class="hero-slider-track">
     {%- for block in section.blocks -%}
       <div class="hero-slide" {{ block.shopify_attributes }}>
+        {%- liquid
+          assign desktop_image = block.settings.image
+          assign mobile_image = block.settings.mobile_image | default: desktop_image
+        -%}
         
-        <!-- Texture/Background Overlay -->
-        {%- if block.settings.texture_overlay != blank -%}
-          <div class="hero-slide__bg-overlay" style="background-image: url({{ block.settings.texture_overlay | image_url: width: 2000 }});"></div>
-        {%- endif -%}
-
-        <!-- Custom Gradient Override -->
-        <div class="hero-slide__bg-color" style="
-          position:absolute; inset:0; z-index:0; 
-          background: {{ block.settings.gradient_background | default: 'linear-gradient(135deg, #e0f2f1 0%, #b2ebf2 100%)' }};
-        "></div>
-        
-        <div class="hero-slide__content-container">
-          <div class="hero-slide__text-col">
-            <h2 class="hero-slide__heading">
-              {{ block.settings.heading | newline_to_br }}
-            </h2>
-            {%- if block.settings.button_label != blank -%}
-              <a href="{{ block.settings.button_link }}" class="hero-slide__btn">
-                {{ block.settings.button_label }}
-              </a>
-            {%- endif -%}
-          </div>
-          
-          <div class="hero-slide__image-col">
-            {%- if block.settings.image != blank -%}
-              {{ block.settings.image | image_url: width: 1400 | image_tag: 
-                class: 'hero-slide__model-image',
-                loading: 'eager',
-                widths: '600, 1000, 1400',
-                sizes: '(max-width: 768px) 100vw, 50vw'
-              }}
-            {%- else -%}
-              {{ 'lifestyle-1' | placeholder_svg_tag: 'hero-slide__model-image' }}
-            {%- endif -%}
-          </div>
-        </div>
+        <picture class="hero-slide__image-container">
+          <source media="(max-width: 768px)" srcset="{{ mobile_image | image_url: width: 800 }}">
+          <source media="(min-width: 769px)" srcset="{{ desktop_image | image_url: width: 1600 }}">
+          {%- if desktop_image != blank -%}
+            {{ desktop_image | image_url: width: 1600 | image_tag: 
+              class: 'hero-slide__image',
+              loading: 'eager',
+              widths: '600, 1000, 1600, 2000',
+              alt: desktop_image.alt
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'hero-slide__image' }}
+          {%- endif -%}
+        </picture>
       </div>
     {%- endfor -%}
   </div>
@@ -224,6 +118,8 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const sliderContainer = document.getElementById('hero-slider-{{ section.id }}');
+    if (!sliderContainer) return;
+    
     const track = sliderContainer.querySelector('.hero-slider-track');
     const dots = sliderContainer.querySelectorAll('.hero-slider-dot');
     const slides = sliderContainer.querySelectorAll('.hero-slide');
@@ -252,7 +148,10 @@
     }
 
     function startAutoplay() {
-      intervalId = setInterval(nextSlide, autoplaySpeed);
+      if(autoplaySpeed > 0) {
+        clearInterval(intervalId);
+        intervalId = setInterval(nextSlide, autoplaySpeed);
+      }
     }
 
     function stopAutoplay() {
@@ -273,13 +172,13 @@
     sliderContainer.addEventListener('touchstart', (e) => {
       touchStartX = e.changedTouches[0].screenX;
       stopAutoplay();
-    });
+    }, {passive: true});
 
     sliderContainer.addEventListener('touchend', (e) => {
       touchEndX = e.changedTouches[0].screenX;
       handleSwipe();
       startAutoplay();
-    });
+    }, {passive: true});
 
     function handleSwipe() {
       if (touchEndX < touchStartX - 50) nextSlide();
@@ -297,7 +196,8 @@
 
 {% schema %}
 {
-  "name": "Hero Slider",
+  "name": "Hero Slider (Image Only)",
+  "max_blocks": 7,
   "settings": [
     {
       "type": "range",
@@ -313,47 +213,24 @@
   "blocks": [
     {
       "type": "slide",
-      "name": "Slide",
+      "name": "Image Slide",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Model Image (Right)"
-        },
-        {
-          "type": "text",
-          "id": "gradient_background",
-          "label": "CSS Gradient (e.g., linear-gradient(...))",
-          "default": "linear-gradient(135deg, #e0f2f1 0%, #b2ebf2 100%)"
+          "label": "Desktop Image"
         },
         {
           "type": "image_picker",
-          "id": "texture_overlay",
-          "label": "Texture Overlay (Water drops)"
-        },
-        {
-          "type": "textarea",
-          "id": "heading",
-          "label": "Heading",
-          "default": "WELLNESS THAT\nWORKS– FOR THE LIFE\nYOU’RE BUILDING."
-        },
-        {
-          "type": "text",
-          "id": "button_label",
-          "label": "Button Label",
-          "default": "Experience it now"
-        },
-        {
-          "type": "url",
-          "id": "button_link",
-          "label": "Button Link"
+          "id": "mobile_image",
+          "label": "Mobile Image (Optional)"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Hero Slider",
+      "name": "Hero Slider (Image Only)",
       "blocks": [
         {
           "type": "slide"
